@@ -1,0 +1,206 @@
+﻿<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+  <Commands package="OpenAISmartTest">
+
+    <Groups>
+      <Group guid="OpenAISmartTest" id="MyGroupForSubMenu" />
+      <Group guid="OpenAISmartTest" id="MyGroupForCommands" />
+      </Groups>
+
+    <Menus>
+      <Menu guid="OpenAISmartTest" id="MySubMenu" type="Menu">
+        <Strings>
+          <ButtonText>-------------- OpenAI - Comandos -------------></ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Buttons>
+      <Button guid="OpenAISmartTest" id="AddTests" priority="0x0100" type="Button">
+        <Icon guid="OpenAISmartTestAddTestsIcon" id="addTestsIcon" />
+        <Strings>
+          <ButtonText>Gerar testes unitários (selecione apenas o método)</ButtonText>
+          <LocCanonicalName>.OpenAISmartTest.AddTests</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="OpenAISmartTest" id="FindBugs" priority="0x0200" type="Button">
+        <Icon guid="OpenAISmartTestFindBugsIcon" id="findBugsIcon" />
+        <Strings>
+          <ButtonText>Validador de código (selecione apenas o método)</ButtonText>
+          <LocCanonicalName>.OpenAISmartTest.FindBugs</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="OpenAISmartTest" id="Explain" priority="0x0400" type="Button">
+        <Icon guid="OpenAISmartTestExplainIcon" id="explainIcon" />
+        <Strings>
+          <ButtonText>Explicação sobre o método (selecione apenas o método)</ButtonText>
+          <LocCanonicalName>.OpenAISmartTest.Explain</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="OpenAISmartTest" id="AddComments" priority="0x0500" type="Button">
+        <Icon guid="OpenAISmartTestAddCommentsIcon" id="addCommentsIcon" />
+        <Strings>
+          <ButtonText>Inserir comentários (selecione apenas o método)</ButtonText>
+          <LocCanonicalName>.OpenAISmartTest.AddComments</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="OpenAISmartTest" id="AddSummary" priority="0x0600" type="Button">
+        <Icon guid="OpenAISmartTestAddSummaryIcon" id="addSummaryIcon" />
+        <Strings>
+          <ButtonText>Inserir sumário (selecione apenas o método)</ButtonText>
+          <LocCanonicalName>.OpenAISmartTest.AddSummary</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="OpenAISmartTest" id="AddSummaryForAll" priority="0x0700" type="Button">
+        <Icon guid="OpenAISmartTestAddSummaryForAllIcon" id="addSummaryForAllIcon" />
+        <Strings>
+          <ButtonText>Inserir sumários em toda classe (não precisa selecionar o método)</ButtonText>
+          <LocCanonicalName>.OpenAISmartTest.AddSummaryForAll</LocCanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="OpenAISmartTest" id="AskAnything" priority="0x0800" type="Button">
+        <Icon guid="OpenAISmartTestAskAnythingIcon" id="askAnythingIcon" />
+        <Strings>
+          <ButtonText>Gerar método de frase comentada (selecione a string comentada)</ButtonText>
+          <LocCanonicalName>.OpenAISmartTest.AskAnything</LocCanonicalName>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="OpenAISmartTestCompleteIcon" href="Resources\complete.png" usedList="completeIcon"/>
+      <Bitmap guid="OpenAISmartTestAddTestsIcon" href="Resources\addTests.png" usedList="addTestsIcon"/>
+      <Bitmap guid="OpenAISmartTestFindBugsIcon" href="Resources\findBugs.png" usedList="findBugsIcon"/>
+      <Bitmap guid="OpenAISmartTestOptimizeIcon" href="Resources\optimize.png" usedList="optimizeIcon"/>
+      <Bitmap guid="OpenAISmartTestExplainIcon" href="Resources\explain.png" usedList="explainIcon"/>
+      <Bitmap guid="OpenAISmartTestAddCommentsIcon" href="Resources\addComments.png" usedList="addCommentsIcon"/>
+      <Bitmap guid="OpenAISmartTestAddSummaryIcon" href="Resources\addSummary.png" usedList="addSummaryIcon"/>
+      <Bitmap guid="OpenAISmartTestAddSummaryForAllIcon" href="Resources\addSummaryForAll.png" usedList="addSummaryForAllIcon"/>
+      <Bitmap guid="OpenAISmartTestAskAnythingIcon" href="Resources\askAnything.png" usedList="askAnythingIcon"/>
+      <Bitmap guid="OpenAISmartTestChatGPTIcon" href="Resources\bot.png" usedList="chatGPTIcon"/>
+      <Bitmap guid="OpenAISmartTestTurboIcon" href="Resources\turbo.png" usedList="turboIcon"/>
+    </Bitmaps>
+  </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="OpenAISmartTest" id="AddTests" mod1="ALT" key1="1" editor="guidVSStd97" />
+    <KeyBinding guid="OpenAISmartTest" id="FindBugs" mod1="ALT" key1="2" editor="guidVSStd97" />
+    <KeyBinding guid="OpenAISmartTest" id="Explain" mod1="ALT" key1="3" editor="guidVSStd97" />
+    <KeyBinding guid="OpenAISmartTest" id="AddComments" mod1="ALT" key1="4" editor="guidVSStd97" />
+    <KeyBinding guid="OpenAISmartTest" id="AddSummary" mod1="ALT" key1="5" editor="guidVSStd97" />
+    <KeyBinding guid="OpenAISmartTest" id="AddSummaryForAll" mod1="ALT" key1="6" editor="guidVSStd97" />
+    <KeyBinding guid="OpenAISmartTest" id="AskAnything" mod1="ALT" key1="7" editor="guidVSStd97" />
+    <KeyBinding guid="OpenAISmartTest" id="Optimize" mod1="ALT" key1="8" editor="guidVSStd97" />
+    <KeyBinding guid="OpenAISmartTest" id="Complete" mod1="ALT" key1="9" editor="guidVSStd97" />
+  </KeyBindings>
+
+  <CommandPlacements>
+    <CommandPlacement guid="OpenAISmartTest" id="MyGroupForSubMenu" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="MySubMenu" priority="0x100">
+      <Parent guid="OpenAISmartTest" id="MyGroupForSubMenu"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="MyGroupForCommands" priority="0x0100">
+      <Parent guid="OpenAISmartTest" id="MySubMenu"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="Complete" priority="0x0000" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="AddTests" priority="0x0100" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="FindBugs" priority="0x0200" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="Optimize" priority="0x0300" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="Explain" priority="0x0400" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="AddComments" priority="0x0500" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="AddSummary" priority="0x0600" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="AddSummaryForAll" priority="0x0700" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+    <CommandPlacement guid="OpenAISmartTest" id="AskAnything" priority="0x0800" >
+      <Parent guid="OpenAISmartTest" id="MyGroupForCommands"/>
+    </CommandPlacement>
+
+  </CommandPlacements>
+
+  <Symbols>
+    <GuidSymbol name="OpenAISmartTest" value="{a8eb0343-b35c-4175-95d8-50549e609ff3}">
+      <IDSymbol name="MyGroupForSubMenu" value="0x1000" />
+      <IDSymbol name="MyGroupForCommands" value="0x1001" />
+      <IDSymbol name="MySubMenu" value="0x2000" />
+
+      <IDSymbol name="Complete" value="0x0000" />
+      <IDSymbol name="AddTests" value="0x0100" />
+      <IDSymbol name="FindBugs" value="0x0200" />
+      <IDSymbol name="Optimize" value="0x0300" />
+      <IDSymbol name="Explain" value="0x0400" />
+      <IDSymbol name="AddComments" value="0x0500" />
+      <IDSymbol name="AddSummary" value="0x0600" />
+      <IDSymbol name="AddSummaryForAll" value="0x0700" />
+      <IDSymbol name="AskAnything" value="0x0800" />
+    </GuidSymbol>
+
+    <GuidSymbol value="{8b0b1a54-4655-4dae-8984-022f82a739f2}" name="guidOpenAISmartTestPackageCmdSet">
+      <IDSymbol value="256" name="cmdidTerminalWindowCommand" />
+      <IDSymbol value="257" name="cmdidTerminalWindowTurboCommand" />
+    </GuidSymbol>
+
+    <GuidSymbol name="OpenAISmartTestCompleteIcon" value="{C12A8ED0-FBE5-4815-A3FB-2CB73AB06EEA}">
+      <IDSymbol name="completeIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestAddTestsIcon" value="{C12A8ED0-FBE5-4815-A3FB-2CB73AB06EEB}">
+      <IDSymbol name="addTestsIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestFindBugsIcon" value="{C12A8ED0-FBE5-4815-A3FB-2CB73AB06EEC}">
+      <IDSymbol name="findBugsIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestOptimizeIcon" value="{C12A8ED0-FBE5-4815-A3FB-2CB73AB06EED}">
+      <IDSymbol name="optimizeIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestExplainIcon" value="{C12A8ED0-FBE5-4815-A3FB-2CB73AB06EEE}">
+      <IDSymbol name="explainIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestAddCommentsIcon" value="{C12A8ED0-FBE5-4815-A3FB-2CB73AB06EEF}">
+      <IDSymbol name="addCommentsIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestAddSummaryIcon" value="{C12A8ED0-FBE5-4815-A3FB-2CB73AB06EAA}">
+      <IDSymbol name="addSummaryIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestAddSummaryForAllIcon" value="{2DE8036F-824C-4B98-BF28-0805CCCE17F4}">
+      <IDSymbol name="addSummaryForAllIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestAskAnythingIcon" value="{C12A8ED0-FBE5-4815-A3FB-2CB73AB06EBA}">
+      <IDSymbol name="askAnythingIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestChatGPTIcon" value="{4C9AF432-30B5-44CB-9A6E-3121C6DC7A49}">
+      <IDSymbol name="chatGPTIcon" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="OpenAISmartTestTurboIcon" value="{4C9AF432-30B5-44CB-9A6E-3121C6DC7A50}">
+      <IDSymbol name="turboIcon" value="1" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
