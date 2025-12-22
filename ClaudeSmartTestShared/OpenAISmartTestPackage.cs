@@ -15,8 +15,8 @@ namespace Eduardo.OpenAISmartTest
     [Guid(PackageGuids.OpenAISmartTestString)]
     [ProvideOptionPage(typeof(OptionPageGridGeneral), "OpenAI Smart Test", "General", 0, 0, true)]
     [ProvideProfile(typeof(OptionPageGridGeneral), "OpenAI Smart Test", "General", 0, 0, true)]
-    [ProvideOptionPage(typeof(OptionPageGridCommands), "OpenAI Smart Test", "Commands", 1, 1, true)]
-    [ProvideProfile(typeof(OptionPageGridCommands), "OpenAI Smart Test", "Commands", 1, 1, true)]
+    //[ProvideOptionPage(typeof(OptionPageGridCommands), "OpenAI Smart Test", "Commands", 1, 1, true)]
+    //[ProvideProfile(typeof(OptionPageGridCommands), "OpenAI Smart Test", "Commands", 1, 1, true)]
     [ProvideToolWindow(typeof(TerminalWindow))]
     [ProvideToolWindow(typeof(TerminalWindowTurbo))]
     public sealed class OpenAISmartTestPackage : ToolkitPackage

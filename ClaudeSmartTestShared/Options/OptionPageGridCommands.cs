@@ -10,122 +10,124 @@ namespace Eduardo.OpenAISmartTest.Options
     [ComVisible(true)]
     public class OptionPageGridCommands : DialogPage
     {
+      
         [Category("OpenAI Smart Test")]
-        [DisplayName("Complete Command")]
+        [DisplayName("Complete")]
         [Description("Set the \"Complete\" command")]
         [DefaultValue("Please complete")]
         public string Complete { get; set; } = "Please complete";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Add Tests (MSTest)")]
-        [Description("Set the \"Add Tests\" command for MSTest")]
-        [DefaultValue("Create MSTest tests")]
+        [DisplayName("Add Tests")]
+        [Description("Set the \"Add Tests\" command")]
+        [DefaultValue("Create unit tests with MSTest")]
         public string AddTestsMSTest { get; set; } = "Create MSTest tests";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Add Tests (xUnit)")]
-        [Description("Set the \"Add Tests\" command for xUnit")]
-        [DefaultValue("Create xUnit tests")]
+        [DisplayName("Add Tests")]
+        [Description("Set the \"Add Tests\" command")]
+        [DefaultValue("Create unit tests with xUnit")]
         public string AddTestsxUnit { get; set; } = "Create xUnit tests";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Add Tests (NUnit)")]
-        [Description("Set the \"Add Tests\" command for NUnit")]
-        [DefaultValue("Create NUnit tests")]
+        [DisplayName("Add Tests")]
+        [Description("Set the \"Add Tests\" command")]
+        [DefaultValue("Create unit tests with NUnit")]
         public string AddTestsNUnit { get; set; } = "Create NUnit tests";
 
+
         [Category("OpenAI Smart Test")]
-        [DisplayName("Find Bugs Command")]
+        [DisplayName("Find Bugs")]
         [Description("Set the \"Find Bugs\" command")]
         [DefaultValue("Find Bugs")]
         public string FindBugs { get; set; } = "Find Bugs";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Find Bugs (Spanish)")]
-        [Description("Set the \"Find Bugs\" command in Spanish")]
-        [DefaultValue("Find Bugs and written in spanish")]
-        public string FindBugsSpanish { get; set; } = "Find Bugs and written in spanish";
+        [DisplayName("Find Bugs")]
+        [Description("Set the \"Find Bugs\" command")]
+        [DefaultValue("Find Bugs")]
+        public string FindBugsSpanish { get; set; } = "FInd Bugs and written in spanish";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Find Bugs (Portuguese)")]
-        [Description("Set the \"Find Bugs\" command in Portuguese")]
+        [DisplayName("Find Bugs")]
+        [Description("Set the \"Find Bugs\" command")]
         [DefaultValue("Find Bugs written in portuguese")]
         public string FindBugsPortuguese { get; set; } = "Find Bugs and written in portuguese";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Optimize Command")]
+        [DisplayName("Optimize")]
         [Description("Set the \"Optimize\" command")]
         [DefaultValue("Optimize")]
         public string Optimize { get; set; } = "Optimize";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Explain Command")]
+        [DisplayName("Explain")]
         [Description("Set the \"Explain\" command")]
         [DefaultValue("Explain")]
         public string Explain { get; set; } = "Explain";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Explain (Portuguese)")]
-        [Description("Set the \"Explain\" command in Portuguese")]
+        [DisplayName("Explain portuguese")]
+        [Description("Set the \"Explain\" command")]
         [DefaultValue("Explain in portuguese")]
         public string ExplainPortuguese { get; set; } = "Explain in portuguese";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Explain (Spanish)")]
-        [Description("Set the \"Explain\" command in Spanish")]
+        [DisplayName("Explain spanish")]
+        [Description("Set the \"Explain\" command")]
         [DefaultValue("Explain in spanish")]
         public string ExplainSpanish { get; set; } = "Explain in spanish";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Add Summary Command")]
+        [DisplayName("Add Summary")]
         [Description("Set the \"Add Summary\" command")]
         [DefaultValue("Only write a comment as C# summary format like")]
         public string AddSummary { get; set; } = "Only write a comment as C# summary format like";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Add Summary (Spanish)")]
-        [Description("Set the \"Add Summary\" command in Spanish")]
+        [DisplayName("Add Summary")]
+        [Description("Set the \"Add Summary\" command")]
         [DefaultValue("Only write a comment as C# summary format translated in Spanish")]
         public string AddSummarySpanish { get; set; } = "Only write a comment as C# summary format translated in Spanish";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Add Summary (Portuguese)")]
-        [Description("Set the \"Add Summary\" command in Portuguese")]
+        [DisplayName("Add Summary")]
+        [Description("Set the \"Add Summary\" command")]
         [DefaultValue("Only write a comment as C# summary format translated in Portuguese")]
         public string AddSummaryPortuguese { get; set; } = "Only write a comment as C# summary format translated in Portuguese";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Add Comments (Single Line)")]
+        [DisplayName("Add Comments for one line")]
         [Description("Set the \"Add Comments\" command when one line was selected")]
-        [DefaultValue("Comment. Add comment char for each comment line")]
+        [DefaultValue("Comment")]
         public string AddCommentsForLine { get; set; } = "Comment. Add comment char for each comment line";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Add Comments (Multiple Lines)")]
+        [DisplayName("Add Comments for multiple lines")]
         [Description("Set the \"Add Comments\" command when multiple lines was selected")]
         [DefaultValue("Rewrite the code with comments")]
         public string AddCommentsForLines { get; set; } = "Rewrite the code with comments. Add comment char for each comment line";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Ask Anything Command")]
+        [DisplayName("Code it the comment")]
         [Description("Write only the code, not the explanation.")]
         [DefaultValue("Code it by use cases. Write only the code, not the explanation.")]
         public string AskAnything { get; set; } = "Code it by use cases. Write only the code, not the explanation.";
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Custom Command (Before)")]
+        [DisplayName("Custom command Before")]
         [Description("Define a custom command that will insert the response before the selected text")]
         [DefaultValue("")]
         public string CustomBefore { get; set; }
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Custom Command (After)")]
+        [DisplayName("Custom command After")]
         [Description("Define a custom command that will insert the response after the selected text")]
         [DefaultValue("")]
         public string CustomAfter { get; set; }
 
         [Category("OpenAI Smart Test")]
-        [DisplayName("Custom Command (Replace)")]
+        [DisplayName("Custom command Replace")]
         [Description("Define a custom command that will replace the selected text with the response")]
         [DefaultValue("")]
         public string CustomReplace { get; set; }

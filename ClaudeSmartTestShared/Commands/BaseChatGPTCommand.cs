@@ -6,10 +6,13 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Anthropic.SDK.Messaging;
 using System;
-using System.Linq;
 using System.Windows.Input;
 using Constants = Eduardo.OpenAISmartTest.Utils.Constants;
 using Span = Microsoft.VisualStudio.Text.Span;
+using Nito.AsyncEx;
+using GTranslate.Translators;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace Eduardo.OpenAISmartTest.Commands
 {
@@ -18,7 +21,7 @@ namespace Eduardo.OpenAISmartTest.Commands
     /// </summary>
     /// <typeparam name="TCommand">The type of the command.</typeparam>
     /// <seealso cref="BaseCommand&lt;&gt;" />
-    internal abstract class BaseChatGPTCommand<TCommand> : BaseCommand<TCommand> where TCommand : class, new()
+   internal abstract class BaseClaudeCommand<TCommand> : BaseCommand<TCommand> where TCommand : class, new()
     {
         protected DocumentView docView;
         private string selectedText;
@@ -29,7 +32,6 @@ namespace Eduardo.OpenAISmartTest.Commands
         private bool firstIteration;
         private bool responseStarted;
         private bool SingleResponse { get; set; } = false;
-
         /// <summary>
         /// Gets the OptionsGeneral property of the OpenAISmartTestPackage.
         /// </summary>
@@ -101,7 +103,7 @@ namespace Eduardo.OpenAISmartTest.Commands
 
                 if (string.IsNullOrWhiteSpace(selectedText))
                 {
-                    await VS.MessageBox.ShowAsync(Constants.EXTENSION_NAME, "Por favor selecione o código.", buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK);
+                    await VS.MessageBox.ShowAsync(Constants.EXTENSION_NAME, "Porfavor selecione o código.", buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK);
 
                     return;
                 }
@@ -117,7 +119,7 @@ namespace Eduardo.OpenAISmartTest.Commands
         }
 
         /// <summary>
-        /// Requests the specified selected text from Claude
+        /// Requests the specified selected text from ChatGPT
         /// </summary>
         /// <param name="selectedText">The selected text.</param>
         private async System.Threading.Tasks.Task RequestAsync(string selectedText)
@@ -140,22 +142,22 @@ namespace Eduardo.OpenAISmartTest.Commands
                 stopSequences = new[] { "public", "private", "internal" };
             }
 
-            if (SingleResponse)
-            {
-                MessageResponse result = await Claude.RequestAsync(OptionsGeneral, command, stopSequences);
+if (SingleResponse)
+                {
+                    MessageResponse result = await Claude.RequestAsync(OptionsGeneral, command, stopSequences);
 
-                ResultHandler(0, result);
-            }
-            else
-            {
-                await Claude.RequestAsync(OptionsGeneral, command, ResultHandler, stopSequences);
-            }
+                    ResultHandler(0, result);
+                }
+                else
+                {
+                    await Claude.RequestAsync(OptionsGeneral, command, ResultHandler, stopSequences);
+                }
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             try
             {
-                //Some documents does not have format
+                //Some documents does not has format
                 (await VS.GetServiceAsync<DTE, DTE>()).ExecuteCommand("Edit.FormatDocument", string.Empty);
             }
             catch (Exception)
@@ -165,10 +167,10 @@ namespace Eduardo.OpenAISmartTest.Commands
         }
 
         /// <summary>
-        /// Results handler for Claude API responses.
+        /// Results handler.
         /// </summary>
         /// <param name="index">The index.</param>
-        /// <param name="result">The result from Claude API.</param>
+        /// <param name="result">The result.</param>
         private void ResultHandler(int index, MessageResponse result)
         {
             const int LINE_LIMIT = 160;
@@ -209,26 +211,15 @@ namespace Eduardo.OpenAISmartTest.Commands
                     firstIteration = false;
                 }
 
-                // Extrai o texto da resposta do Claude
-                string resultText = ExtractTextFromResponse(result);
-
-                if (string.IsNullOrEmpty(resultText))
-                {
-                    return;
-                }
+                string resultText = result.Content.FirstOrDefault()?.Text ?? string.Empty;
 
                 if (SingleResponse)
                 {
-                    //This code checks if the string "resultText" starts with "\r\n" and if it does, it removes from the string. 
-                    //It will continue to do this until the string no longer starts with "\r\n". 
-                    while (resultText.StartsWith("\r\n") || resultText.StartsWith("\n"))
-                    {
-                        resultText = resultText.TrimStart('\r', '\n');
-                    }
+                    
                 }
                 else if (!responseStarted && (resultText.Equals("\n") || resultText.Equals("\r") || resultText.Equals(Environment.NewLine)))
                 {
-                    //Do nothing when API sends only break lines on response begin
+                    //Do nothing when API send only break lines on response begin
                     return;
                 }
 
@@ -255,34 +246,6 @@ namespace Eduardo.OpenAISmartTest.Commands
 
             }
         }
-
-        /// <summary>
-        /// Extracts text content from Claude MessageResponse.
-        /// </summary>
-        /// <param name="response">The Claude API response.</param>
-        /// <returns>The extracted text content.</returns>
-        private string ExtractTextFromResponse(MessageResponse response)
-        {
-            if (response?.Content == null)
-            {
-                return string.Empty;
-            }
-
-            // Claude retorna Content como lista de ContentBase
-            // Filtra apenas TextContent e concatena
-            var textContent = new System.Text.StringBuilder();
-
-            foreach (var content in response.Content)
-            {
-                if (content is TextContent textBlock)
-                {
-                    textContent.Append(textBlock.Text);
-                }
-            }
-
-            return textContent.ToString();
-        }
-
         /// <summary>
         /// Inserts a new line into the document and optionally moves the position to the start of the next line.
         /// </summary>

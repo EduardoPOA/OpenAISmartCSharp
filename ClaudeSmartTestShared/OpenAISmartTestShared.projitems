@@ -30,9 +30,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ToolWindows\TerminalWindowControl.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ToolWindows\TerminalWindowTurbo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ToolWindows\TerminalWindowTurboControl.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ChatGPT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ChatTurboItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ChatGPTHttpClientFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\Claude.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HighlightingDefinitionConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HttpClientCustom.cs" />

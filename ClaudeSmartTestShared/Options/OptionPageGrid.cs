@@ -14,16 +14,16 @@ namespace Eduardo.OpenAISmartTest.Options
     {
         internal static readonly object Instance;
 
+        
 
-
-
+        
 
         [Category("Claude Smart Test")]
         [DisplayName("Modelo Claude")]
         [Description("Selecione o modelo Claude a ser usado.")]
-        [DefaultValue(ModelLanguageEnum.Claude_3_Opus)]
+        [DefaultValue(ModelLanguageEnum.Claude_3_Sonnet)]
         [TypeConverter(typeof(EnumConverter))]
-        public ModelLanguageEnum Model { get; set; } = ModelLanguageEnum.Claude_3_Opus;
+        public ModelLanguageEnum Model { get; set; } = ModelLanguageEnum.Claude_3_Sonnet;
 
         [Category("Claude Smart Test")]
         [DisplayName("API Key")]
@@ -57,6 +57,10 @@ namespace Eduardo.OpenAISmartTest.Options
         [TypeConverter(typeof(DoubleConverter))]
         public double Temperature { get; set; } = 0;
 
+        
+
+        
+
         [Category("Claude Smart Test")]
         [DisplayName("Top P")]
         [Description("A alternativa à amostragem com temperatura, onde o modelo considera os resultados dos tokens com massa de probabilidade top_p.")]
@@ -79,9 +83,9 @@ namespace Eduardo.OpenAISmartTest.Options
         [Category("Claude Smart Test")]
         [DisplayName("Modelo de Chat Claude")]
         [Description("Defina o modelo Claude a ser usado para o chat.")]
-        [DefaultValue(TurboChatModelLanguageEnum.Claude_3_Opus)]
+        [DefaultValue(TurboChatModelLanguageEnum.Claude_3_Sonnet)]
         [TypeConverter(typeof(EnumConverter))]
-        public TurboChatModelLanguageEnum TurboChatModelLanguage { get; set; } = TurboChatModelLanguageEnum.Claude_3_Opus;
+        public TurboChatModelLanguageEnum TurboChatModelLanguage { get; set; } = TurboChatModelLanguageEnum.Claude_3_Sonnet;
 
         [Category("Claude Smart Test")]
         [DisplayName("Resposta Única")]
@@ -94,6 +98,14 @@ namespace Eduardo.OpenAISmartTest.Options
         [Description("Conecte-se ao Claude através de um proxy.")]
         [DefaultValue("")]
         public string Proxy { get; set; } = string.Empty;
+
+        
+
+        
+
+        
+
+        
     }
 
     /// <summary>
@@ -115,6 +127,8 @@ namespace Eduardo.OpenAISmartTest.Options
         Claude_3_Sonnet,
         Claude_3_Haiku
     }
+
+
 
     /// <summary>
     /// Enum to select language

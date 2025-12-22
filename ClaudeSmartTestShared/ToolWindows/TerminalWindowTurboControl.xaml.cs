@@ -3,10 +3,8 @@ using Eduardo.OpenAISmartTest.Options;
 using Eduardo.OpenAISmartTest.Utils;
 using Microsoft.VisualStudio.Shell;
 using Anthropic.SDK.Messaging;
-using Anthropic.SDK.Constants;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -24,7 +22,7 @@ namespace Eduardo.OpenAISmartTest.ToolWindows
 
         private OptionPageGridGeneral options;
         private Package package;
-        private List<Message> conversation;
+        private List<Message> messages;
         private List<ChatTurboItem> chatItems;
 
         #endregion Properties
@@ -67,12 +65,9 @@ namespace Eduardo.OpenAISmartTest.ToolWindows
 
                 await VS.StatusBar.ShowProgressAsync(Constants.MESSAGE_WAITING_CHATGPT, 1, 2);
 
-                string userMessage = txtRequest.Text;
+                chatItems.Add(new ChatTurboItem(AuthorEnum.Me, txtRequest.Text, true, 0));
 
-                chatItems.Add(new ChatTurboItem(AuthorEnum.Me, userMessage, true, 0));
-
-                // Adiciona mensagem do usuário à conversa
-                conversation.Add(new Message(RoleType.User, userMessage));
+                messages.Add(new Message { Role = "user", Content = txtRequest.Text });
 
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
@@ -83,15 +78,11 @@ namespace Eduardo.OpenAISmartTest.ToolWindows
                     scrollViewer.ScrollToEnd();
                 }));
 
-                // Obtém resposta do Claude
-                MessageResponse claudeResponse = await Claude.RequestChatAsync(options, conversation);
+                var response = await Claude.RequestChatAsync(options, messages);
 
-                string response = ExtractTextFromResponse(claudeResponse);
-
-                // Adiciona resposta do assistente à conversa
-                conversation.Add(new Message(RoleType.Assistant, response));
-
-                List<ChatTurboResponseSegment> segments = TurboChatHelper.GetChatTurboResponseSegments(response);
+                string responseText = response.Content.FirstOrDefault()?.Text ?? string.Empty;
+                messages.Add(new Message { Role = "assistant", Content = responseText });
+                List<ChatTurboResponseSegment> segments = TurboChatHelper.GetChatTurboResponseSegments(responseText);
 
                 AuthorEnum author;
 
@@ -136,7 +127,7 @@ namespace Eduardo.OpenAISmartTest.ToolWindows
                 return;
             }
 
-            conversation = Claude.CreateConversation(options);
+            messages = Claude.CreateConversation(options);
             chatItems.Clear();
             chatList.Items.Refresh();
         }
@@ -209,38 +200,11 @@ namespace Eduardo.OpenAISmartTest.ToolWindows
             this.options = options;
             this.package = package;
 
-            conversation = Claude.CreateConversation(options);
+            messages = Claude.CreateConversation(options);
 
             chatItems = new();
 
             chatList.ItemsSource = chatItems;
-        }
-
-        /// <summary>
-        /// Extracts text content from Claude MessageResponse.
-        /// </summary>
-        /// <param name="response">The Claude API response.</param>
-        /// <returns>The extracted text content.</returns>
-        private string ExtractTextFromResponse(MessageResponse response)
-        {
-            if (response?.Content == null)
-            {
-                return string.Empty;
-            }
-
-            // Claude retorna Content como lista de ContentBase
-            // Filtra apenas TextContent e concatena
-            var textContent = new StringBuilder();
-
-            foreach (var content in response.Content)
-            {
-                if (content is TextContent textBlock)
-                {
-                    textContent.Append(textBlock.Text);
-                }
-            }
-
-            return textContent.ToString();
         }
 
         #endregion Methods                            

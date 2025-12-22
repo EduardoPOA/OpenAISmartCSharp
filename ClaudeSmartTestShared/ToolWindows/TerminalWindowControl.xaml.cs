@@ -4,7 +4,6 @@ using Eduardo.OpenAISmartTest.Utils;
 using Microsoft.VisualStudio.Shell;
 using Anthropic.SDK.Messaging;
 using System;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using Clipboard = System.Windows.Clipboard;
@@ -143,7 +142,7 @@ namespace Eduardo.OpenAISmartTest.ToolWindows
         /// Handles the result of an operation and appends it to the end of the txtResponse control.
         /// </summary>
         /// <param name="index">The index of the operation.</param>
-        /// <param name="result">The result from Claude API.</param>
+        /// <param name="result">The result of the operation.</param>
         private async void ResultHandler(int index, MessageResponse result)
         {
             if (firstInteration)
@@ -154,12 +153,7 @@ namespace Eduardo.OpenAISmartTest.ToolWindows
                 responseStarted = false;
             }
 
-            string resultText = ExtractTextFromResponse(result);
-
-            if (string.IsNullOrEmpty(resultText))
-            {
-                return;
-            }
+            string resultText = result.Content.FirstOrDefault()?.Text ?? string.Empty;
 
             if (!responseStarted && (resultText.Equals("\n") || resultText.Equals("\r") || resultText.Equals(Environment.NewLine)))
             {
@@ -177,34 +171,7 @@ namespace Eduardo.OpenAISmartTest.ToolWindows
         }
 
         /// <summary>
-        /// Extracts text content from Claude MessageResponse.
-        /// </summary>
-        /// <param name="response">The Claude API response.</param>
-        /// <returns>The extracted text content.</returns>
-        private string ExtractTextFromResponse(MessageResponse response)
-        {
-            if (response?.Content == null)
-            {
-                return string.Empty;
-            }
-
-            // Claude retorna Content como lista de ContentBase
-            // Filtra apenas TextContent e concatena
-            var textContent = new StringBuilder();
-
-            foreach (var content in response.Content)
-            {
-                if (content is TextContent textBlock)
-                {
-                    textContent.Append(textBlock.Text);
-                }
-            }
-
-            return textContent.ToString();
-        }
-
-        /// <summary>
-        /// Sends a request to the Claude window and handles the response.
+        /// Sends a request to the Claude window.and handles the response.
         /// </summary>
         /// <param name="command">The command to send to the Claude window.</param>
         public async System.Threading.Tasks.Task RequestToWindowAsync(string command)

@@ -2,8 +2,6 @@
 using Eduardo.OpenAISmartTest.Commands;
 using Eduardo.OpenAISmartTest.Options;
 using Eduardo.OpenAISmartTest.Utils;
-using GTranslate.Translators;
-using Nito.AsyncEx;
 using System;
 
 namespace Eduardo.OpenAISmartTest
@@ -18,37 +16,30 @@ namespace Eduardo.OpenAISmartTest
 
         protected override string GetCommand(string selectedText)
         {
-            return TextFormat.FormatCommandForSummary($"{OptionsCommands.AddSummary}\r\n\r\n{{0}}\r\n\r\n", GetTranslatorLanguage(selectedText));
+            // Pega o comando correto baseado no idioma
+            string summaryCommand = GetSummaryCommandByLanguage();
+
+            // Formata o comando completo
+            return TextFormat.FormatCommandForSummary(summaryCommand, selectedText);
         }
 
-        private string GetTranslatorLanguage(string phrase)
+        /// <summary>
+        /// Retorna o comando de summary apropriado baseado no idioma selecionado.
+        /// </summary>
+        private string GetSummaryCommandByLanguage()
         {
-            string response = null;
             switch (OptionsGeneral.language)
             {
-                case SelectLanguageEnum.en:
-                    return AsyncContext.Run(async () =>
-                    {
-                        var translator = new BingTranslator();
-                        var result = await translator.TranslateAsync(phrase, "en");
-                        return response = Convert.ToString(result);
-                    });
                 case SelectLanguageEnum.es:
-                    return AsyncContext.Run(async () =>
-                    {
-                        var translator = new BingTranslator();
-                        var result = await translator.TranslateAsync(phrase, "es");
-                        return response = Convert.ToString(result);
-                    });
+                    return OptionsCommands.AddSummarySpanish;
+
                 case SelectLanguageEnum.pt:
-                    return AsyncContext.Run(async () =>
-                    {
-                        var translator = new BingTranslator();
-                        var result = await translator.TranslateAsync(phrase, "pt");
-                        return response = Convert.ToString(result);
-                    });
+                    return OptionsCommands.AddSummaryPortuguese;
+
+                case SelectLanguageEnum.en:
+                default:
+                    return OptionsCommands.AddSummary;
             }
-            return response;
         }
     }
 }
