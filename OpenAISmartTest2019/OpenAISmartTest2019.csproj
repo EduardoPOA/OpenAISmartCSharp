@@ -99,7 +99,7 @@
       <Version>6.3.0.90</Version>
     </PackageReference>
     <PackageReference Include="Community.VisualStudio.Toolkit.17">
-      <Version>17.0.507</Version>
+      <Version>17.0.545</Version>
     </PackageReference>
     <PackageReference Include="Community.VisualStudio.VSCT" Version="16.0.29.6" PrivateAssets="all" />
     <PackageReference Include="GTranslate">

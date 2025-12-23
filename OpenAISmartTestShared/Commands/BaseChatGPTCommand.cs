@@ -28,7 +28,7 @@ namespace Eduardo.OpenAISmartTest.Commands
         private int lineLength;
         private bool firstIteration;
         private bool responseStarted;
-        private bool SingleResponse { get; set; } = false;
+        public bool SingleResponse { get; set; } = false;
 
         /// <summary>
         /// Gets the OptionsGeneral property of the OpenAISmartTestPackage.
@@ -124,8 +124,14 @@ namespace Eduardo.OpenAISmartTest.Commands
         {
             string command = GetCommand(selectedText);
 
+            System.Diagnostics.Debug.WriteLine("=== DEBUG RequestAsync ===");
+            System.Diagnostics.Debug.WriteLine($"Command length: {command.Length}");
+            System.Diagnostics.Debug.WriteLine($"Command: '{command}'");
+            System.Diagnostics.Debug.WriteLine($"SingleResponse: {SingleResponse}");
+
             if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
             {
+                System.Diagnostics.Debug.WriteLine("Shift key pressed, sending to terminal");
                 await TerminalWindowCommand.Instance.RequestToWindowAsync(command);
 
                 return;
@@ -142,12 +148,14 @@ namespace Eduardo.OpenAISmartTest.Commands
 
             if (SingleResponse)
             {
+                System.Diagnostics.Debug.WriteLine("Using SingleResponse mode");
                 MessageResponse result = await Claude.RequestAsync(OptionsGeneral, command, stopSequences);
 
                 ResultHandler(0, result);
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine("Using streaming mode");
                 await Claude.RequestAsync(OptionsGeneral, command, ResultHandler, stopSequences);
             }
 
@@ -158,12 +166,13 @@ namespace Eduardo.OpenAISmartTest.Commands
                 //Some documents does not have format
                 (await VS.GetServiceAsync<DTE, DTE>()).ExecuteCommand("Edit.FormatDocument", string.Empty);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine($"Error formatting document: {ex.Message}");
             }
-        }
 
+            System.Diagnostics.Debug.WriteLine("=== END DEBUG RequestAsync ===");
+        }
         /// <summary>
         /// Results handler for Claude API responses.
         /// </summary>
@@ -175,11 +184,18 @@ namespace Eduardo.OpenAISmartTest.Commands
 
             try
             {
+                System.Diagnostics.Debug.WriteLine("=== DEBUG ResultHandler ===");
+                System.Diagnostics.Debug.WriteLine($"ResultHandler called - index: {index}");
+                System.Diagnostics.Debug.WriteLine($"Result is null: {result == null}");
+
                 if (firstIteration)
                 {
                     _ = VS.StatusBar.ShowProgressAsync(Constants.MESSAGE_RECEIVING_CHATGPT, 2, 2);
 
                     CommandType commandType = GetCommandType(selectedText);
+
+                    System.Diagnostics.Debug.WriteLine($"CommandType: {commandType}");
+                    System.Diagnostics.Debug.WriteLine($"Position: {position}, PositionStart: {positionStart}, PositionEnd: {positionEnd}");
 
                     if (commandType == CommandType.Replace)
                     {
@@ -212,8 +228,13 @@ namespace Eduardo.OpenAISmartTest.Commands
                 // Extrai o texto da resposta do Claude
                 string resultText = ExtractTextFromResponse(result);
 
+                System.Diagnostics.Debug.WriteLine($"Result text length: {resultText?.Length}");
+                System.Diagnostics.Debug.WriteLine($"Result text: '{resultText}'");
+
                 if (string.IsNullOrEmpty(resultText))
                 {
+                    System.Diagnostics.Debug.WriteLine("Result text is null or empty");
+                    System.Diagnostics.Debug.WriteLine("=== END DEBUG ResultHandler ===");
                     return;
                 }
 
@@ -229,6 +250,8 @@ namespace Eduardo.OpenAISmartTest.Commands
                 else if (!responseStarted && (resultText.Equals("\n") || resultText.Equals("\r") || resultText.Equals(Environment.NewLine)))
                 {
                     //Do nothing when API sends only break lines on response begin
+                    System.Diagnostics.Debug.WriteLine("Skipping initial break lines");
+                    System.Diagnostics.Debug.WriteLine("=== END DEBUG ResultHandler ===");
                     return;
                 }
 
@@ -236,9 +259,12 @@ namespace Eduardo.OpenAISmartTest.Commands
 
                 if (typeof(TCommand) == typeof(AddSummary) && (resultText.Contains("{") || resultText.Contains("}")))
                 {
+                    System.Diagnostics.Debug.WriteLine("Skipping AddSummary response with braces");
+                    System.Diagnostics.Debug.WriteLine("=== END DEBUG ResultHandler ===");
                     return;
                 }
 
+                System.Diagnostics.Debug.WriteLine($"Inserting text at position: {position}");
                 docView.TextBuffer?.Insert(position, resultText);
 
                 position += resultText.Length;
@@ -249,13 +275,15 @@ namespace Eduardo.OpenAISmartTest.Commands
                 {
                     MoveToNextLineAndAddCommentPrefix();
                 }
-            }
-            catch (Exception)
-            {
 
+                System.Diagnostics.Debug.WriteLine("=== END DEBUG ResultHandler ===");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"EXCEPTION in ResultHandler: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
             }
         }
-
         /// <summary>
         /// Extracts text content from Claude MessageResponse.
         /// </summary>
@@ -263,8 +291,13 @@ namespace Eduardo.OpenAISmartTest.Commands
         /// <returns>The extracted text content.</returns>
         private string ExtractTextFromResponse(MessageResponse response)
         {
+            System.Diagnostics.Debug.WriteLine("=== DEBUG ExtractTextFromResponse ===");
+            System.Diagnostics.Debug.WriteLine($"Response is null: {response == null}");
+            System.Diagnostics.Debug.WriteLine($"Response.Content is null: {response?.Content == null}");
+
             if (response?.Content == null)
             {
+                System.Diagnostics.Debug.WriteLine("=== END DEBUG ExtractTextFromResponse (empty) ===");
                 return string.Empty;
             }
 
@@ -272,17 +305,27 @@ namespace Eduardo.OpenAISmartTest.Commands
             // Filtra apenas TextContent e concatena
             var textContent = new System.Text.StringBuilder();
 
+            System.Diagnostics.Debug.WriteLine($"Content count: {response.Content.Count}");
+
             foreach (var content in response.Content)
             {
+                System.Diagnostics.Debug.WriteLine($"Content type: {content.GetType().Name}");
+
                 if (content is TextContent textBlock)
                 {
+                    System.Diagnostics.Debug.WriteLine($"TextContent text length: {textBlock.Text?.Length}");
+                    System.Diagnostics.Debug.WriteLine($"TextContent preview: '{textBlock.Text?.Substring(0, Math.Min(100, textBlock.Text?.Length ?? 0))}'");
                     textContent.Append(textBlock.Text);
                 }
             }
 
-            return textContent.ToString();
-        }
+            string result = textContent.ToString();
+            System.Diagnostics.Debug.WriteLine($"Final extracted text length: {result.Length}");
+            System.Diagnostics.Debug.WriteLine($"Final extracted text: '{result}'");
+            System.Diagnostics.Debug.WriteLine("=== END DEBUG ExtractTextFromResponse ===");
 
+            return result;
+        }
         /// <summary>
         /// Inserts a new line into the document and optionally moves the position to the start of the next line.
         /// </summary>
