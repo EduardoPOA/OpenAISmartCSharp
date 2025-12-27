@@ -1,7 +1,6 @@
 ﻿using Community.VisualStudio.Toolkit;
 using Eduardo.OpenAISmartTest.Commands;
 using Eduardo.OpenAISmartTest.Options;
-using Eduardo.OpenAISmartTest.Utils;
 using System;
 
 namespace Eduardo.OpenAISmartTest
@@ -9,6 +8,11 @@ namespace Eduardo.OpenAISmartTest
     [Command(PackageIds.AddSummary)]
     internal sealed class AddSummary : BaseChatGPTCommand<AddSummary>
     {
+        public AddSummary()
+        {
+            SingleResponse = true;
+        }
+
         protected override CommandType GetCommandType(string selectedText)
         {
             return CommandType.InsertBefore;
@@ -16,30 +20,18 @@ namespace Eduardo.OpenAISmartTest
 
         protected override string GetCommand(string selectedText)
         {
-            // Pega o comando correto baseado no idioma
-            string summaryCommand = GetSummaryCommandByLanguage();
+            string cleanText = selectedText?.Trim() ?? string.Empty;
 
-            // Formata o comando completo
-            return TextFormat.FormatCommandForSummary(summaryCommand, selectedText);
-        }
-
-        /// <summary>
-        /// Retorna o comando de summary apropriado baseado no idioma selecionado.
-        /// </summary>
-        private string GetSummaryCommandByLanguage()
-        {
-            switch (OptionsGeneral.language)
+            // Comando baseado na linguagem configurada
+            string instruction = OptionsGeneral?.language switch
             {
-                case SelectLanguageEnum.es:
-                    return OptionsCommands.AddSummarySpanish;
+                SelectLanguageEnum.en => "Add English XML documentation summary for this code. Use triple slash /// format. Be concise and descriptive. Return only the summary documentation:",
+                SelectLanguageEnum.es => "Agrega documentación XML en español para este código. Usa formato triple barra ///. Sé conciso y descriptivo. Retorna solo la documentación:",
+                SelectLanguageEnum.pt => "Adicione documentação XML em português para este código. Use formato de três barras ///. Seja conciso e descritivo. Retorne apenas a documentação:",
+                _ => "Add Portuguese XML documentation summary for this code. Use triple slash /// format. Be concise and descriptive. Return only the summary documentation:"
+            };
 
-                case SelectLanguageEnum.pt:
-                    return OptionsCommands.AddSummaryPortuguese;
-
-                case SelectLanguageEnum.en:
-                default:
-                    return OptionsCommands.AddSummary;
-            }
+            return $"{instruction}{Environment.NewLine}{Environment.NewLine}{cleanText}";
         }
     }
 }

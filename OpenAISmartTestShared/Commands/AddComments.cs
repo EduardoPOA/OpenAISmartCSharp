@@ -1,8 +1,6 @@
 ﻿using Community.VisualStudio.Toolkit;
 using Eduardo.OpenAISmartTest.Commands;
 using Eduardo.OpenAISmartTest.Options;
-using GTranslate.Translators;
-using Nito.AsyncEx;
 using System;
 
 namespace Eduardo.OpenAISmartTest
@@ -10,58 +8,30 @@ namespace Eduardo.OpenAISmartTest
     [Command(PackageIds.AddComments)]
     internal sealed class AddComments : BaseChatGPTCommand<AddComments>
     {
+        public AddComments()
+        {
+            SingleResponse = true;
+        }
+
         protected override CommandType GetCommandType(string selectedText)
         {
-            if (CodeContainsMultipleLines(selectedText))
-            {
-                return CommandType.Replace;
-            }
-            return CommandType.InsertBefore;
+            return CommandType.Replace;
         }
 
         protected override string GetCommand(string selectedText)
         {
-            if (selectedText.Contains(Environment.NewLine))
+            string cleanText = selectedText?.Trim() ?? string.Empty;
+
+            // Instrução baseada na linguagem configurada
+            string instruction = OptionsGeneral?.language switch
             {
-                return $"{GetTranslatorLanguage(OptionsCommands.AddCommentsForLines)}{Environment.NewLine}{Environment.NewLine}{selectedText}";
-            }
-            return $"{GetTranslatorLanguage(OptionsCommands.AddCommentsForLine)}{Environment.NewLine}{Environment.NewLine}{selectedText}";
-        }
+                SelectLanguageEnum.en => "Add English comments above code lines. Use // on separate lines. Keep original code. Return only commented code:",
+                SelectLanguageEnum.es => "Agrega comentarios en español arriba del código. Usa // en líneas separadas. Mantén código original. Retorna solo código comentado:",
+                SelectLanguageEnum.pt => "Adicione comentários em português acima do código. Use // em linhas separadas. Mantenha código original. Retorne apenas código comentado:",
+                _ => "Add Portuguese comments above code lines. Use // on separate lines. Keep original code. Return only commented code:"
+            };
 
-        private bool CodeContainsMultipleLines(string code)
-        {
-            return code.Contains("\r\n") || code.Contains("\n") || code.Contains("\r");
-        }
-
-        private string GetTranslatorLanguage(string phrase)
-        {
-            string response = null;
-            switch (OptionsGeneral.language)
-            {
-                case SelectLanguageEnum.en:
-                    return AsyncContext.Run(async () =>
-                    {
-                        var translator = new BingTranslator();
-                        var result = await translator.TranslateAsync(phrase, "en");
-                        return response = Convert.ToString(result).Replace("</code>","").Trim();
-                    });
-                case SelectLanguageEnum.es:
-                    return AsyncContext.Run(async () =>
-                    {
-                        var translator = new BingTranslator();
-                        var result = await translator.TranslateAsync(phrase, "es");
-                        return response = Convert.ToString(result).Replace("</code>", "").Trim();
-                    });
-                case SelectLanguageEnum.pt:
-                    return AsyncContext.Run(async () =>
-                    {
-                        var translator = new BingTranslator();
-                        var result = await translator.TranslateAsync(phrase, "pt");
-                        return response = Convert.ToString(result).Replace("</code>", "").Trim();
-                    });
-
-            }
-            return response;
+            return $"{instruction}{Environment.NewLine}{Environment.NewLine}{cleanText}";
         }
     }
 }

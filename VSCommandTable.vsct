@@ -12,7 +12,7 @@
     <Menus>
       <Menu guid="OpenAISmartTest" id="MySubMenu" type="Menu">
         <Strings>
-          <ButtonText>-------------- OpenAI - Comandos -------------></ButtonText>
+          <ButtonText>-------------- AI - Comandos -------------></ButtonText>
         </Strings>
       </Menu>
     </Menus>

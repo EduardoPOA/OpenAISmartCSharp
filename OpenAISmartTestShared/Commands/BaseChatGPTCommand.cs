@@ -206,18 +206,23 @@ namespace Eduardo.OpenAISmartTest.Commands
                     }
                     else if (commandType == CommandType.InsertBefore)
                     {
-                        position = positionStart;
-
-                        InsertANewLine(false);
+                        if (typeof(TCommand) == typeof(Explain) || typeof(TCommand) == typeof(FindBugs))
+                        {
+                            position = positionStart;
+                        }
+                        else
+                        {
+                            position = positionStart;
+                            InsertANewLine(false);
+                        }
                     }
                     else
                     {
                         position = positionEnd;
-
                         InsertANewLine(true);
                     }
 
-                    if (typeof(TCommand) == typeof(Explain) || typeof(TCommand) == typeof(FindBugs))
+                    if (typeof(TCommand) == typeof(Explain))
                     {
                         AddCommentChars();
                     }
@@ -227,7 +232,10 @@ namespace Eduardo.OpenAISmartTest.Commands
 
                 // Extrai o texto da resposta do Claude
                 string resultText = ExtractTextFromResponse(result);
-
+                if (typeof(TCommand) == typeof(FindBugs))
+                {
+                    resultText += "\n";
+                }
                 System.Diagnostics.Debug.WriteLine($"Result text length: {resultText?.Length}");
                 System.Diagnostics.Debug.WriteLine($"Result text: '{resultText}'");
 
@@ -350,7 +358,6 @@ namespace Eduardo.OpenAISmartTest.Commands
         private void MoveToNextLineAndAddCommentPrefix()
         {
             lineLength = 0;
-
             InsertANewLine(true);
             AddCommentChars();
         }
@@ -361,6 +368,9 @@ namespace Eduardo.OpenAISmartTest.Commands
         private void AddCommentChars()
         {
             string commentChars = TextFormat.GetCommentChars(docView.FilePath);
+
+            if (commentChars == "//")
+                commentChars = string.Empty;
 
             docView.TextBuffer?.Insert(position, commentChars);
             position += commentChars.Length;
